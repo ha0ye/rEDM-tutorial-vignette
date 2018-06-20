@@ -1,0 +1,48 @@
+\begin{thebibliography}{6}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Dixon \emph{et~al.}(1999)Dixon, Milicich, and Sugihara}]{Dixon_1999}
+Dixon PA, Milicich M, Sugihara G (1999).
+\newblock \enquote{Episodic fluctuations in larval supply.}
+\newblock \emph{Science}, \textbf{283}, 1528--1530.
+
+\bibitem[{Sugihara(1994)}]{Sugihara_1994}
+Sugihara G (1994).
+\newblock \enquote{Nonlinear forecasting for the classification of natural time
+  series.}
+\newblock \emph{Philosophical Transactions: Physical Sciences and Engineering},
+  \textbf{348}(1688), 477--495.
+
+\bibitem[{Sugihara \emph{et~al.}(2012)Sugihara, May, Ye, Hsieh, Deyle, Fogarty,
+  and Munch}]{Sugihara_2012}
+Sugihara G, May R, Ye H, Hsieh CH, Deyle E, Fogarty M, Munch S (2012).
+\newblock \enquote{Detecting causality in complex ecosystems.}
+\newblock \emph{Science}, \textbf{338}, 496--500.
+
+\bibitem[{Sugihara and May(1990)}]{Sugihara_1990}
+Sugihara G, May RM (1990).
+\newblock \enquote{Nonlinear forecasting as a way of distinguishing chaos from
+  measurement error in time series.}
+\newblock \emph{Nature}, \textbf{344}, 734--741.
+
+\bibitem[{Takens(1981)}]{Takens_1981}
+Takens F (1981).
+\newblock \enquote{Detecting strange attractors in turbulence.}
+\newblock \emph{Dynamical Systems and Turbulence, Lecture Notes in
+  Mathematics}, \textbf{898}, 366--381.
+
+\bibitem[{Ye and Sugihara(2016)}]{Ye_2016}
+Ye H, Sugihara G (2016).
+\newblock \enquote{Information leverage in interconnected ecosystems:
+  Overcoming the curse of dimensionality.}
+\newblock \emph{Science}, \textbf{353}(6302), 922--925.
+
+\end{thebibliography}
