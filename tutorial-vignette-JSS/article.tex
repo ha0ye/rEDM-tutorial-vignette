@@ -68,9 +68,9 @@ Empirical dynamic modeling (EDM) is an emerging non-parametric framework for mod
 
 \section{Introduction} \label{sec:intro}
 
-Many scientific fields use models as approximations of reality and for various purposes (e.g. testing hypotheses regarding mechanisms or processes, explaining past observations, predicting future outcomes). In most cases these models are based on hypothesized parametric equations; however explicit equations can be impractical when the exact mechanisms are unknown or too complex to be characterized with existing datasets. Empirical models, which infer patterns and associations from the data (instead of using hypothesized equations), represent an alternative and highly flexible approach. Here, we review the theoretical background for empirical dynamic modeling (EDM) and the functionality of the \pkg{rEDM} package, which are intended for nonlinear dynamic systems that can prove problematic for traditional modeling approaches.
+Many scientific fields use models as approximations of reality and for various purposes (e.g., testing hypotheses regarding mechanisms or processes, explaining past observations, predicting future outcomes). In most cases these models are based on hypothesized parametric equations; however explicit equations can be impractical when the exact mechanisms are unknown or too complex to be characterized with existing datasets. Empirical models, which infer patterns and associations from the data (instead of using hypothesized equations), represent an alternative and highly flexible approach. Here, we review the theoretical background for empirical dynamic modeling (EDM) and the functionality of the \pkg{rEDM} package, which are intended for nonlinear dynamic systems that can prove problematic for traditional modeling approaches.
 
-The basic goal underlying EDM is to reconstruct the behavior of dynamic systems using time series data. This approach is based on mathematical theory developed initially by \citep{Takens_1981}, and subsequently expanded \citep{Sauer_1991, Casdagli_1991, Deyle_2011}. Because these methods operate with minimal assumptions, they are particularly suitable for studying systems that exhibit non-equilibrium dynamics and nonlinear state-dependent behavior (i.e. where interactions change over time and as a function of the system state).
+The basic goal underlying EDM is to reconstruct the behavior of dynamic systems using time series data. This approach is based on mathematical theory developed initially by \citep{Takens_1981}, and subsequently expanded \citep{Sauer_1991, Casdagli_1991, Deyle_2011}. Because these methods operate with minimal assumptions, they are particularly suitable for studying systems that exhibit non-equilibrium dynamics and nonlinear state-dependent behavior (i.e., where interactions change over time and as a function of the system state).
 
 \subsection{Installation}\label{sec:installation}
 
@@ -96,7 +96,7 @@ R> devtools::install_github("ha0ye/rEDM")
 
 The essential concept is that time series can be viewed as projections of the behavior of a dynamic system. Here, only a few modest assumptions are required. First, the system state can be described as a point in a high-dimensional space. The axes of this space can be thought of as fundamental state variables; in an ecosystem, these variables might correspond to population abundances, resources, or environmental conditions. Second, the system state changes through time following a set of deterministic rules. In other words, the behavior of the system is not completely stochastic.
 
-Consequently, it is possible to project the system state onto one of the coordinate axes and obtain the value of the corresponding state variable. Sequential projections over time will thus produce a time series for that variable. For example, in Figure \ref{fig:time-series-projection}, the states of the canonical Lorenz Attractor \cite{Lorenz_1963} are projected to the $x$-axis, creating a time series of variable $x$.
+Consequently, it is possible to project the system state onto one of the coordinate axes and obtain the value of the corresponding state variable. Sequential projections over time will thus produce a time series for that variable. For example, in Figure \ref{fig:time-series-projection}, the states of the canonical Lorenz Attractor \citep{Lorenz_1963} are projected to the $x$-axis, creating a time series of variable $x$.
 
 \begin{figure}[t!]
 \centering
@@ -108,7 +108,7 @@ In simple cases, each time series will represent a different state variable. How
 
 \subsection{Attractor Reconstruction / Takens' Theorem}\label{sec:attractor-reconstruction}
 
-The goal of EDM is to reconstruct the system dynamics from time series data. Because time series are sequential observations of the system behavior, information about the rules that govern system behavior (i.e. the system dynamics) is therefore encoded in the data. Takens' Theorem \cite{Takens_1981} provides a way to recover this information using just a single time series. Although the system behavior is nominally determined by a high-dimensional state space, we can substitute lags of a time series for any unknown or unobserved variables. For example, instead of representing the system state of the Lorenz Attractor using $x$, $y$, and $z$, we can instead use an embedding that consists of $E$ lags of $x$:
+The goal of EDM is to reconstruct the system dynamics from time series data. Because time series are sequential observations of the system behavior, information about the rules that govern system behavior (i.e., the system dynamics) is therefore encoded in the data. Takens' Theorem \citep{Takens_1981} provides a way to recover this information using just a single time series. Although the system behavior is nominally determined by a high-dimensional state space, we can substitute lags of a time series for any unknown or unobserved variables. For example, instead of representing the system state of the Lorenz Attractor using $x$, $y$, and $z$, we can instead use an embedding that consists of \code{E} lags of $x$:
 \begin{equation}
 \mathbf{x}_t = \left( x_t, x_{t-\tau}, \dots, x_{t-(E-1)\tau} \right)
 \end{equation}
@@ -127,7 +127,7 @@ There are many applications for using this approach to recover system dynamics f
 
 \subsection{Nearest Neighbor Forecasting using Simplex Projection}\label{sec:nearest-neighbor-forecasting}
 
-As mentioned previously, if enough lags are used, the reconstruction will map one-to-one to the original attractor. However, if the number of lags is insufficient (i.e. the embedding dimension is too small), then the reconstruction will have singularities -- points that actually correspond to different system states, but which overlap in the reconstruction. When this occurs, the reconstruction will fail to distinguish between different trajectories, and forecast performance will suffer. Thus, prediction skill can be used as an indicator for the optimal embedding dimension.
+As mentioned previously, if enough lags are used, the reconstruction will map one-to-one to the original attractor. However, if the number of lags is insufficient (i.e., the embedding dimension is too small), then the reconstruction will have singularities -- points that actually correspond to different system states, but which overlap in the reconstruction. When this occurs, the reconstruction will fail to distinguish between different trajectories, and forecast performance will suffer. Thus, prediction skill can be used as an indicator for the optimal embedding dimension.
 
 In the following example, we demonstrate how to select the embedding dimension. We use a nearest neighbor forecasting method, Simplex Projection \citep{Sugihara_1990}, to produce forecasts, and examine prediction skill, computed as the correlation between observed and predicted values.
 
@@ -175,14 +175,14 @@ R> pred <- c(201, 500)
 
 We begin by initializing the \code{lib} and \code{pred} variables. These variables define the portions of the data that will be used to create the reconstruction. \code{lib} corresponds to the ``training'' portion of the data, on which nearest neighbors can be identified; and \code{pred} corresponds to the ``test'' portion of the data, on which 1-step ahead forecasts will be made. Here, the first 100 points (positions 1 to 100) in the time series constitute the ``library set'', and 300 points (positions 201 to 500) constitute the ``prediction set''.
 
-The remaining arguments will be left at their default values (see section \ref{sec:general-parameters} for details). For the \code{simplex()} function, this means that the embedding dimension, $E$, will range from $1$ to $10$.
+The remaining arguments will be left at their default values (see section \ref{sec:general-parameters} for details). For the \code{simplex()} function, this means that the embedding dimension, \code{E}, will range from $1$ to $10$.
 
 \emph{Note that if the code detects any overlap in the lib and pred, it will prevent a vector from becoming its own neighbor by enabling leave-one-out cross-validation and outputting a warning message.}
 
 \begin{Schunk}
 \begin{Sinput}
 R> simplex_output <- simplex(ts, lib, pred)
-R> str(simplex_output, strict.width = "cut")
+R> str(simplex_output)
 \end{Sinput}
 \begin{Soutput}
 'data.frame':	10 obs. of  16 variables:
@@ -205,9 +205,9 @@ R> str(simplex_output, strict.width = "cut")
 \end{Soutput}
 \end{Schunk}
 
-The output is a data.frame with columns for each of the model parameters and forecast statistics, and rows for each separate model (i.e. different parameter combinations). For Simplex Projection, the model parameters are \code{E}, embedding dimension; \code{tau}, time lag between successive dimensions; \code{tp}, time to prediction; and \code{nn}, number of nearest neighbors. The forecast statistics are \code{num_pred}, the number of predictions made; \code{rho}, Pearson's correlation coefficient between predictions and observations; \code{mae}, mean absolute error of predictions; \code{rmse}, root mean squared error of predictions; \code{perc}, the percent of predictions that are the same sign as observations; and \code{p_val}, the p-value for \code{rho} being significantly greater than 0, using Fisher's transformation \cite{Fisher_1915}. For the purpose of comparison, the last 6 columns give those same forecast statistics, but for a naive constant predictor (where the 1-step ahead forecast is the current value) over the same set of predictions.
+The output is a data.frame with columns for each of the model parameters and forecast statistics, and rows for each separate model (i.e., different parameter combinations). For Simplex Projection, the model parameters are \code{E}, embedding dimension; \code{tau}, time lag between successive dimensions; \code{tp}, time to prediction; and \code{nn}, number of nearest neighbors. The forecast statistics are \code{num_pred}, the number of predictions made; \code{rho}, Pearson's correlation coefficient between predictions and observations; \code{mae}, mean absolute error of predictions; \code{rmse}, root mean squared error of predictions; \code{perc}, the percent of predictions that are the same sign as observations; and \code{p_val}, the p-value for \code{rho} being significantly greater than 0, using Fisher's transformation \citep{Fisher_1915}. For the purpose of comparison, the last 6 columns give those same forecast statistics, but for a naive constant predictor (where the 1-step ahead forecast is the current value) over the same set of predictions.
 
-In this case, there are 10 separate models (one for each value of \code{E}), so we can plot \code{E} against \code{rho} (the correlation between observed and predicted values) to determine the optimal embedding dimension (i.e. the number of dimensions for which the reconstructed attractor is best unfolded, producing the highest forecast skill).
+In this case, there are 10 separate models (one for each value of \code{E}), so we can plot \code{E} against \code{rho} (the correlation between observed and predicted values) to determine the optimal embedding dimension (i.e., the number of dimensions for which the reconstructed attractor is best unfolded, producing the highest forecast skill).
 
 \begin{Schunk}
 \begin{Sinput}
@@ -227,7 +227,7 @@ In Figure \ref{fig:simplex-e}, we observe that forecast skill peaks at \code{E =
 
 \subsection{Prediction Decay}\label{sec:prediction-decay}
 
-An important property of many natural systems is that nearby trajectories eventually diverge over time (i.e. ``deterministic chaos'' -- the ``butterfly effect''). In essence, this means that while short-term prediction is often possible, information about the state of the system is continually lost over time, hindering long-term prediction. We can demonstrate this effect by examining how prediction skill changes as we increase the \code{tp} argument, the ``time to prediction'', the number of time steps into the future that forecasts are made.
+An important property of many natural systems is that nearby trajectories eventually diverge over time (i.e., ``deterministic chaos'' -- the ``butterfly effect''). In essence, this means that while short-term prediction is often possible, information about the state of the system is continually lost over time, hindering long-term prediction. We can demonstrate this effect by examining how prediction skill changes as we increase the \code{tp} argument, the ``time to prediction'', the number of time steps into the future that forecasts are made.
 
 \subsubsection{Example}\label{sec:prediction-decay-example}
 
@@ -259,7 +259,7 @@ Because the parameters for the tent map fall in the region for chaotic behavior,
 
 \subsection{Identifying Nonlinearity}\label{sec:nonlinearity}
 
-One concern is that time series may show predictability even if they are purely stochastic, because they have temporal autocorrelation (i.e. similar to autocorrelated red noise). We can distinguish between red noise and nonlinear deterministic behavior by using S-maps as described in \citet{Sugihara_1994}.
+One concern is that time series may show predictability even if they are purely stochastic, because they have temporal autocorrelation (i.e., similar to autocorrelated red noise). We can distinguish between red noise and nonlinear deterministic behavior by using S-maps as described in \citet{Sugihara_1994}.
 
 In contrast to the nearest-neighbor interpolation of simplex projection, the S-map forecasting method \citep{Sugihara_1994} fits local linear maps to forecast from the reconstructed state space. Here, ``local'' means that the map can be different at different locations in the reconstructed state space.
 
@@ -321,7 +321,7 @@ In addition to creating an attractor from lags of one time series, it is possibl
 
 In \pkg{rEDM}, the \code{block_lnlp()} function generalizes the \code{simplex()} and \code{s_map()} functions: reconstructions can be formed from any set of coordinates, and forecasts are made using either of the two methods.
 
-The data format for \code{block_lnlp()} is a matrix or data.frame, where each column is a separate time series, and each row is a temporal ``slice'' of the data comprised of simultaneous observations. A reconstruction is defined by specifying which columns to use as coordinates (the \code{columns} argument) and which column is to be forecast (the \code{target_column} argument). If lagged copies of a time series are desired as coordinates, they need to be pre-computed as separate columns in the input (e.g. via the \code{make_block()} function).
+The data format for \code{block_lnlp()} is a matrix or data.frame, where each column is a separate time series, and each row is a temporal ``slice'' of the data comprised of simultaneous observations. A reconstruction is defined by specifying which columns to use as coordinates (the \code{columns} argument) and which column is to be forecast (the \code{target_column} argument). If lagged copies of a time series are desired as coordinates, they need to be pre-computed as separate columns in the input (e.g., via the \code{make_block()} function).
 
 \subsubsection{Example}\label{sec:block-lnlp-example}
 
@@ -378,7 +378,7 @@ R> stopifnot(identical(output, output_2))
 \end{Sinput}
 \end{Schunk}
 
-Note that the default value for the \code{tp} argument is \code{1}, indicating that predictions are 1-step ahead (i.e. using each row of the \code{columns} variables to predict the subsequent row of the \code{target_column} variable). \emph{In some cases, the data may be formatted to have the predicted variable aligned in the same row (but in a different column), and \code{tp} should be set to \code{0}.}
+Note that the default value for the \code{tp} argument is \code{1}, indicating that predictions are 1-step ahead (i.e., using each row of the \code{columns} variables to predict the subsequent row of the \code{target_column} variable). \emph{In some cases, the data may be formatted to have the predicted variable aligned in the same row (but in a different column), and \code{tp} should be set to \code{0}.}
 
 \begin{Schunk}
 \begin{Sinput}
@@ -411,7 +411,7 @@ R> str(output)
 \end{Soutput}
 \end{Schunk}
 
-By setting \code{stats_only} to \code{FALSE}, the output also includes the observed and predicted values in a list column (\code{model_output}). Unlike other columns, which are vectors of simple types (e.g. numeric, character), the \code{model_output} column is a list of length 1, whose single element is a data.frame of the observed and predicted values. If we had run multiple models, the \code{model_output} column would be a list of multiple data.frames (one data.frame of observed and predicted values for each model).
+By setting \code{stats_only} to \code{FALSE}, the output also includes the observed and predicted values in a list column (\code{model_output}). Unlike other columns, which are vectors of simple types (e.g., numeric, character), the \code{model_output} column is a list of length 1, whose single element is a data.frame of the observed and predicted values. If we had run multiple models, the \code{model_output} column would be a list of multiple data.frames (one data.frame of observed and predicted values for each model).
 
 To compare the observed and predicted values, we want to pull out the appropriate columns:
 \begin{Schunk}
@@ -491,8 +491,8 @@ R> predictions <- output$model_output[[1]]
 R> t <- predictions$time
 R> plot(t, predictions$obs, type = "l", col = "black", ylab = "x", xlab = "")
 R> lines(t, predictions$pred, lty = 2)
-R> legend("topright", legend = c("observed", "predicted"), 
-+         lty = c(1, 2), bty = "n")
+R> legend("topright", legend = c("observed", "predicted"), lty = c(1, 2), 
++         bg = "white")
 R> plot(t, smap_coeffs[, 1], type = "l", col = "red", 
 +       ylab = "effect of x", xlab = "")
 R> plot(t, smap_coeffs[, 2], type = "l", col = "blue", 
@@ -557,7 +557,7 @@ R> predicted <- output$model_output[[1]]$pred
 R> par(pty = "s", mar = c(4, 4, 1, 1), mgp = c(2.5, 1, 0))
 R> plot_range <- range(c(observed, predicted), na.rm = TRUE)
 R> plot(observed, predicted, xlim = plot_range, ylim = plot_range,
-+       xlab = "Observed", ylab = "Predicted", asp = 1, pch = 3)
++       xlab = "Observed", ylab = "Predicted", asp = 1)
 R> abline(a = 0, b = 1, lty = 2, col = "blue")
 \end{Sinput}
 \end{Schunk}
@@ -583,13 +583,11 @@ R> pred <- c(floor(NROW(block_3sp) / 2) + 1, NROW(block_3sp))
 R> # multiple values for \code{k} can be provided, 
 R> #   "sqrt" uses floor(sqrt(m)), where m is the number of embeddings
 R> k_list <- c(1, 3, "sqrt", "all")
-R> multiview_output <- multiview(block, lib = lib, pred = pred,
-+                                E = 3, max_lag = 3, 
-+                                k = k_list, target_column = 1, 
-+                                stats_only = FALSE, 
-+                                save_lagged_block = TRUE, 
-+                                silent = TRUE)
-R> str(multiview_output, max.level = 1)
+R> output <- multiview(block, lib = lib, pred = pred,
++                      E = 3, max_lag = 3, target_column = 1, 
++                      k = k_list, stats_only = FALSE, 
++                      save_lagged_block = TRUE, silent = TRUE)
+R> str(output, max.level = 1)
 \end{Sinput}
 \begin{Soutput}
 'data.frame':	4 obs. of  14 variables:
@@ -622,13 +620,13 @@ R> par(pty = "s", mfrow = c(2, 2),
 +      mar = c(4, 4, 1, 1), mgp = c(2.5, 1, 0))
 R> for (i in 1:4)
 +  {
-+      preds <- multiview_output$model_output[[i]]
++      preds <- output$model_output[[i]]
 +      
 +      plot_range <- range(c(preds$obs, preds$pred), na.rm = TRUE)
 +      plot(preds$obs, preds$pred, 
 +           xlim = plot_range, ylim = plot_range,
 +           xlab = "Observed", ylab = "Predicted", asp = 1, 
-+           main = paste0(multiview_output$k[i], " embeddings"))
++           main = paste0(output$k[i], " embeddings"))
 +      abline(a = 0, b = 1, lty = 2, col = "blue")
 +  }
 \end{Sinput}
@@ -651,7 +649,7 @@ One of the corollaries to Takens' Theorem is that multiple reconstructions not o
 \caption{\label{fig:cross-mapping} Cross Mapping Between Reconstructions of the Lorenz Attractor.}
 \end{figure}
 
-Furthermore, in the case of unidirectional causality, e.g. $x$ causes $y$, but $y$ does not cause $x$, we would only expect cross mapping to be successful in one direction. Somewhat counterintuitively, if a causal variable ($x$) leaves a signature on the affected variable ($y$), then it is possible to map from $\mathbf{M}_y$ to $\mathbf{M}_x$, but not vice-versa.
+Furthermore, in the case of unidirectional causality, e.g., $x$ causes $y$, but $y$ does not cause $x$, we would only expect cross mapping to be successful in one direction. Somewhat counterintuitively, if a causal variable ($x$) leaves a signature on the affected variable ($y$), then it is possible to map from $\mathbf{M}_y$ to $\mathbf{M}_x$, but not vice-versa.
 
 In essence, $\mathbf{M}_y$ must have complete information about $y$, which means it must include information about all its causes, including $x$. However, because $x$ behaves independently of $y$, the reconstruction $\mathbf{M}_x$ may be missing information about $y$, preventing a \emph{complete} cross mapping from $\mathbf{M}_x$ to $y$.
 
@@ -688,9 +686,9 @@ R> str(anch_xmap_sst)
  $ target_column: Factor w/ 1 level "np_sst": 1 1 1 1 1 1 1 1 1 1 ...
  $ lib_size     : num  10 10 10 10 10 10 10 10 10 10 ...
  $ num_pred     : num  76 76 76 76 76 76 76 76 76 76 ...
- $ rho          : num  -0.1709 -0.2148 0.2528 0.0397 0.355 ...
- $ mae          : num  0.954 1.005 0.79 0.966 0.825 ...
- $ rmse         : num  1.18 1.24 1.07 1.2 1.05 ...
+ $ rho          : num  -0.18294 -0.00919 0.0888 0.15243 0.12651 ...
+ $ mae          : num  0.967 1.174 0.912 0.83 0.923 ...
+ $ rmse         : num  1.17 1.42 1.12 1.06 1.17 ...
 \end{Soutput}
 \end{Schunk}
 
@@ -706,7 +704,7 @@ R> plot(a_xmap_t_means$lib_size, pmax(0, a_xmap_t_means$rho),
 +       xlab = "Library Size", ylab = "Cross Map Skill (rho)")
 R> lines(t_xmap_a_means$lib_size, pmax(0, t_xmap_a_means$rho), col = "blue")
 R> legend("topleft", legend = c("anchovy xmap SST", "SST xmap anchovy"),
-+         col = c("red", "blue"), lwd = 1, bty = "n")
++         col = c("red", "blue"), lwd = 1, bty = "n", cex = 0.8)
 \end{Sinput}
 \end{Schunk}
 
@@ -717,7 +715,7 @@ R> legend("topleft", legend = c("anchovy xmap SST", "SST xmap anchovy"),
 \caption{\label{fig:ccm-anchovy-sst} \code{rho} vs. Library Size for cross mapping between anchovy and sea-surface-temperature.}
 \end{figure}
 
-Figure \ref{fig:ccm-anchovy-sst} shows the convergence in cross-mapping between anchovy and sea-surface temperature, suggesting that past temperature has left a causal imprint on the anchovy time series. Conversely, the lack of any convergence in the other direction indicates no such effect in the opposite, direction, as expected (i.e. temperature is not affected by anchovy abundance).
+Figure \ref{fig:ccm-anchovy-sst} shows the convergence in cross-mapping between anchovy and sea-surface temperature, suggesting that past temperature has left a causal imprint on the anchovy time series. Conversely, the lack of any convergence in the other direction indicates no such effect in the opposite, direction, as expected (i.e., temperature is not affected by anchovy abundance).
 
 \subsection{Time Delays with CCM}\label{sec:ccm-time-delays}
 
@@ -731,7 +729,7 @@ However, \code{tp} is an argument to \code{ccm()}, and accepts both positive and
 
 Note that negative values of \code{tp} ($tp < 0$) correspond to estimating the \emph{past} values of $x$ using the reconstructed states of $\mathbf{y}$. This suggests that the dynamical signal appears first in $x$ and later in $y$, and is consistent with $x$ causing $y$, becauses causes must precede effects.
 
-If there is no causation in the reverse direction (i.e. $y$ does not cause $x$), then the reconstructed states of $\mathbf{x}$ should best predict future values of $y$ and we would expect CCM skill in the opposite direction:
+If there is no causation in the reverse direction (i.e., $y$ does not cause $x$), then the reconstructed states of $\mathbf{x}$ should best predict future values of $y$ and we would expect CCM skill in the opposite direction:
 $$ y_{t+tp} = G\left(\mathbf{x}_t\right) = G\left(x_t, x_{t-\tau}, \dots, x_{t-(E-1)\tau} \right) $$
 would be highest at a positive value of \code{tp} ($tp > 0$).
 
@@ -817,14 +815,14 @@ As expected for this simple predator-prey system (Figure \ref{fig:ccm-time-delay
 
 \subsection{Community Productivity and Invasibility}\label{sec:e120}
 
-The data presented here are part of Experiment 120, the ``Big Biodiversity'' experiment at Cedar Creek LTER \citep{Tilman_1997}. The full data and metadata are available at \url{http://www.cedarcreek.umn.edu/research/data}. This experiment is the longest running randomized test for the effects of plant diversity on ecosystem functions. Plots were established in 1994 and planted with 1, 2, 4, 8, or 16 species, and are sampled annually for above-ground plant biomass. The most well-known result from the experiment is that the number of planted species has strong positive effects on above-ground biomass production. However, because the diversity treatments are weeded annually to prevent non-planted species from establishing (i.e. species richness is not allowed to vary dynamically), this well-known result does not lend itself to EDM.
+The data presented here are part of Experiment 120, the ``Big Biodiversity'' experiment at Cedar Creek LTER \citep{Tilman_1997}. The full data and metadata are available at \url{http://www.cedarcreek.umn.edu/research/data}. This experiment is the longest running randomized test for the effects of plant diversity on ecosystem functions. Plots were established in 1994 and planted with 1, 2, 4, 8, or 16 species, and are sampled annually for above-ground plant biomass. The most well-known result from the experiment is that the number of planted species has strong positive effects on above-ground biomass production. However, because the diversity treatments are weeded annually to prevent non-planted species from establishing (i.e., species richness is not allowed to vary dynamically), this well-known result does not lend itself to EDM.
 
-Instead, we focus on a different set of published results from the experiment: interactions between primary productivity, soil nitrate, and invasion rates. Increased biomass is associated with decreases in soil nitrate levels and decreases in invasion success \citep{Fargione_2005}. A posited mechanism is that increased primary productivity leads to decreased soil nitrate, which in turn reduces resources available to invaders. In order to increase sample size, we combine data from the treatments with 16 planted species, which have almost identical planted compositions and follow similar dynamics. We then analyze these different plots together as spatial replicates, similar to Hsieh et al. \cite{Hsieh_2008} and Clark et al. \cite{Clark_2015}.
+Instead, we focus on a different set of published results from the experiment: interactions between primary productivity, soil nitrate, and invasion rates. Increased biomass is associated with decreases in soil nitrate levels and decreases in invasion success \citep{Fargione_2005}. A posited mechanism is that increased primary productivity leads to decreased soil nitrate, which in turn reduces resources available to invaders. In order to increase sample size, we combine data from the treatments with 16 planted species, which have almost identical planted compositions and follow similar dynamics. We then analyze these different plots together as spatial replicates, similar to Hsieh et al. \citep{Hsieh_2008} and Clark et al. \citep{Clark_2015}.
 
 \begin{Schunk}
 \begin{Sinput}
 R> data(e120_invnit16)
-R> str(e120_invnit16, strict.width = "cut")
+R> str(e120_invnit16)
 \end{Sinput}
 \begin{Soutput}
 'data.frame':	238 obs. of  7 variables:
@@ -838,7 +836,7 @@ R> str(e120_invnit16, strict.width = "cut")
 \end{Soutput}
 \end{Schunk}
 
-The columns in the dataset \code{e120_invnit16} are as follows: \code{Exp} indicates the experiment code, \code{Year} shows the sampling time; \code{Plot} describes plot identity; \code{AbvBioAnnProd} shows annual above-ground productivity of planted species, in g/m$^2$; \code{noh020tot} shows soil nitrate levels in the top 20 cm of soil, measured in mg/kg soil; \code{invrichness} shows species richness of unplanted species in the plot (i.e. weeds); \code{SummerPrecip.mm.} shows precipitation annual from May to August measured in mm.
+The columns in the dataset \code{e120_invnit16} are as follows: \code{Exp} indicates the experiment code, \code{Year} shows the sampling time; \code{Plot} describes plot identity; \code{AbvBioAnnProd} shows annual above-ground productivity of planted species, in g/m$^2$; \code{noh020tot} shows soil nitrate levels in the top 20 cm of soil, measured in mg/kg soil; \code{invrichness} shows species richness of unplanted species in the plot (i.e., weeds); \code{SummerPrecip.mm.} shows precipitation annual from May to August measured in mm.
 
 \subsubsection{Preparing the Data}\label{sec:e120-data-prep}
 
@@ -991,17 +989,13 @@ Next, we run the models, being sure to set up predictor variables (the \code{col
 \begin{Sinput}
 R> AB_columns <- c("AbvBioAnnProd", "AbvBioAnnProd_1", 
 +                  "AbvBioAnnProd_2", "AbvBioAnnProd_3")
-R> AB_out <- block_lnlp(block_data, 
+R> AB_out <- block_lnlp(block_data, target_column = "AbvBioAnnProd", 
 +                       lib = composite_lib, pred = composite_pred, 
-+                       columns = AB_columns, 
-+                       target_column = "AbvBioAnnProd", 
-+                       stats_only = FALSE)
++                       columns = AB_columns, stats_only = FALSE)
 R> Prec_columns <- c(AB_columns, "SummerPrecip.mm.")
-R> Prec_out <- block_lnlp(block_data,
+R> Prec_out <- block_lnlp(block_data, target_column = "AbvBioAnnProd", 
 +                         lib = composite_lib, pred = composite_pred, 
-+                         columns = Prec_columns, 
-+                         target_column = "AbvBioAnnProd", 
-+                         stats_only = FALSE)
++                         columns = Prec_columns, stats_only = FALSE)
 \end{Sinput}
 \end{Schunk}
 
@@ -1024,7 +1018,7 @@ R> legend("bottom", legend = c(paste("(biomass alone) rho =",
 +                                    round(AB_out$rho, 2)), 
 +                               paste("(biomass and prec.) rho =", 
 +                                     round(Prec_out$rho, 2))), 
-+         lty = 3, lwd = 2, col = c("black", "red"), bty = "n")
++         lty = 3, lwd = 2, col = c("black", "red"), bty = "n", cex = 0.8)
 \end{Sinput}
 \end{Schunk}
 
@@ -1039,7 +1033,7 @@ There is a marked improvement in forecast skill when including precipitation as 
 
 \subsubsection{Convergent Cross Mapping}\label{sec:convergent-cross-mapping}
 
-Finally, we can apply CCM to test for pairwise causal links among variables. For each individual test, we use the embedding dimension corresponding to the best embedding dimension of the variable used for reconstruction (i.e. the putative affected process). Recall we are primarily interested in testing whether the biomass of planted species or soil nitrogen concentration affects the dynamics of invading species.
+Finally, we can apply CCM to test for pairwise causal links among variables. For each individual test, we use the embedding dimension corresponding to the best embedding dimension of the variable used for reconstruction (i.e., the putative affected process). Recall we are primarily interested in testing whether the biomass of planted species or soil nitrogen concentration affects the dynamics of invading species.
 
 First, we examine the relationship between invader richness and soil nitrate level:
 \begin{Schunk}
@@ -1070,7 +1064,7 @@ R> lines(no_xmap_inv_means$lib_size, pmax(0, no_xmap_inv_means$rho),
 +        col = "blue", lwd = 2)
 R> legend(x = "topleft", col = c("red", "blue"), lwd = 2, bty = "n", 
 +         legend = c("Inv. Richness xmap Nitrate", 
-+                    "Nitrate xmap Inv. Richness"))
++                    "Nitrate xmap Inv. Richness"), cex = 0.8)
 R> abline(h = 0, lty = 3)
 \end{Sinput}
 \end{Schunk}
@@ -1110,7 +1104,7 @@ R> lines(abv_xmap_inv_means$lib_size, pmax(0, abv_xmap_inv_means$rho),
 +        col = "blue", lwd = 2)
 R> legend(x = "topleft", col = c("red", "blue"), lwd = 2, bty = "n", 
 +         legend = c("Inv. Richness xmap Total Biomass", 
-+                    "Total Biomass xmap Inv. Richness"))
++                    "Total Biomass xmap Inv. Richness"), cex = 0.8)
 R> abline(h = 0, lty = 3)
 \end{Sinput}
 \end{Schunk}
@@ -1122,15 +1116,15 @@ R> abline(h = 0, lty = 3)
 \caption{\label{fig:ccm-e120-inv-abv} \code{rho} vs. Library Size for cross mapping between richness and productivity.}
 \end{figure}
 
-Figure \ref{fig:ccm-e120-inv-no} suggests that plot-level soil nitrate is causally forced by invader richness, while the reverse is not true. This is plausible, as the planted compositions are quite similar among experimental replicates, and fluctuations in soil nitrate may be largely indicative of minor variations due to transient populations of invading species before they can be weeded out. Thus, the effect of nitrate on invader richness may be minimal. However, recall from the S-map analysis that soil nitrate dynamics also appear linear. As such, a more detailed look into the relationship between nitrate and invader richness may be warranted, that also considers methods more appropriate for linear systems, such as Granger Causality \cite{Granger_1969}.
+Figure \ref{fig:ccm-e120-inv-no} suggests that plot-level soil nitrate is causally forced by invader richness, while the reverse is not true. This is plausible, as the planted compositions are quite similar among experimental replicates, and fluctuations in soil nitrate may be largely indicative of minor variations due to transient populations of invading species before they can be weeded out. Thus, the effect of nitrate on invader richness may be minimal. However, recall from the S-map analysis that soil nitrate dynamics also appear linear. As such, a more detailed look into the relationship between nitrate and invader richness may be warranted, that also considers methods more appropriate for linear systems, such as Granger Causality \citep{Granger_1969}.
 
 Figure \ref{fig:ccm-e120-inv-abv} indicates bidirectional forcing between invader richness and total biomass. Although we would normally expect $\rho$ to continue to increase with library length, the decrease here is not necessarily problematic. For the CCM analysis, we use a composite time series constructed from multiple plots with no more than 7 time points each. Consequently, the larger library sizes represent samples that contain multiple plots. The small decrease in $\rho$ at larger library sizes may therefore indicate heterogeneity in the causal effects among plots.
 
-Overall, these results suggest that invader richness is influenced by the biomass of the planted community, with a somewhat weaker effect in the opposite direction, but that nitrate is influenced by invader dynamics without feedbacks. In contrast to existing hypotheses, this result indicates that in plots planted with 16 species, the planted community biomass itself directly inhibits invasion (e.g. through light limitation), rather than through an indirect effects on soil nitrate, as nitrate does not appear to affect invader richness (n.b. though recall that we are analyzing dynamics within only a single level of planted species richness).
+Overall, these results suggest that invader richness is influenced by the biomass of the planted community, with a somewhat weaker effect in the opposite direction, but that nitrate is influenced by invader dynamics without feedbacks. In contrast to existing hypotheses, this result indicates that in plots planted with 16 species, the planted community biomass itself directly inhibits invasion (e.g., through light limitation), rather than through an indirect effects on soil nitrate, as nitrate does not appear to affect invader richness (n.b. though recall that we are analyzing dynamics within only a single level of planted species richness).
 
 \subsection{Apple-Blossom Thrips}\label{sec:thrips}
 
-Next, we re-examine the classic apple-blossom thrips (\emph{Thrips imaginis}) time series from the Waite Institute in Australia \citep{Davidson_1948, Davidson_1948a}. Seasonal outbreaks of thrips were observed to vary greatly in magnitude from year to year, with large outbreaks occurring simultaneously across space. This led to the hypothesis that regional-scale climatic factors were responsible for controlling the size of the seasonal outbreaks (what might now be called the Moran effect \cite{Moran_1953}).
+Next, we re-examine the classic apple-blossom thrips (\emph{Thrips imaginis}) time series from the Waite Institute in Australia \citep{Davidson_1948, Davidson_1948a}. Seasonal outbreaks of thrips were observed to vary greatly in magnitude from year to year, with large outbreaks occurring simultaneously across space. This led to the hypothesis that regional-scale climatic factors were responsible for controlling the size of the seasonal outbreaks (what might now be called the Moran effect \citep{Moran_1953}).
 
 \begin{Schunk}
 \begin{Sinput}
@@ -1139,10 +1133,10 @@ R> str(thrips_block)
 \end{Sinput}
 \begin{Soutput}
 'data.frame':	81 obs. of  6 variables:
- $ Year           : int  1932 1932 1932 1932 1932 1932 1932 1932 1932 1933 ...
+ $ Year           : int  1932 1932 1932 1932 1932 1932 1932 1932 1932 193..
  $ Month          : int  4 5 6 7 8 9 10 11 12 1 ...
  $ Thrips_imaginis: num  4.5 23.4 17.8 4.4 3.3 ...
- $ maxT_degC      : num  19.2 19.1 14.3 13.8 14.6 17.6 17.4 23.3 24.3 24.8 ...
+ $ maxT_degC      : num  19.2 19.1 14.3 13.8 14.6 17.6 17.4 23.3 24.3 24...
  $ Rain_mm        : num  140.1 53.7 134.1 89.9 92.2 ...
  $ Season         : num  -0.5 -0.866 -1 -0.866 -0.5 0 0.5 0.866 1 0.866 ...
 \end{Soutput}
@@ -1152,25 +1146,37 @@ The first data column, \code{Thrips_imaginis}, contains counts of \emph{Thrips i
 
 First, we plot the data.
 
-
 \begin{Schunk}
 \begin{Sinput}
-R> iso_date <- as.Date(paste0(thrips_block$Year, "-", thrips_block$Month, "-15"))
-R> plot(iso_date, thrips_block$Thrips_imaginis, type = "l", col = "green", ylab = "Thrips", xlab = "")
-R> plot(iso_date, thrips_block$maxT_degC, type = "l", col = "red", ylab = "maxT (oC)", xlab = "")
-R> plot(iso_date, thrips_block$Rain_mm, type = "l", col = "blue", ylab = "Rain (mm)", xlab = "")
-R> plot(iso_date, thrips_block$Season, type = "l", col = "magenta", ylab = "Season", xlab = "")
+R> par(mfrow = c(4, 1), mar = c(2, 4, 1, 1), oma = c(2, 0, 0, 0),
++      mgp = c(2.5, 1, 0))
+R> t <- as.Date(paste0(thrips_block$Year, "-", thrips_block$Month, "-15"))
+R> plot(t, thrips_block$Thrips_imaginis, 
++       type = "l", col = "green", ylab = "Thrips", xlab = "")
+R> plot(t, thrips_block$maxT_degC, type = "l", 
++       col = "red", ylab = "maxT (oC)", xlab = "")
+R> plot(t, thrips_block$Rain_mm, type = "l", 
++       col = "blue", ylab = "Rain (mm)", xlab = "")
+R> plot(t, thrips_block$Season, type = "l", 
++       col = "magenta", ylab = "Season", xlab = "")
 R> mtext("Year", side = 1, outer = TRUE, line = 1)
 \end{Sinput}
 \end{Schunk}
 
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=5in]{article-thrips-time-series}
+\end{center}
+\caption{\label{fig:thrips-time-series} Time series of Thrips abundance, temperature, rainfall, and seasonality.}
+\end{figure}
 
-Note that all the time-series variables show marked seasonality.
+Note that all the time-series variables show marked seasonality (Figure \ref{fig:thrips-time-series}).
 
 \subsubsection{Univariate Analysis}\label{sec:thrips-univariate}
 
 \begin{Schunk}
 \begin{Sinput}
+R> par(mar = c(4, 4, 1, 1), mgp = c(2.5, 1, 0))
 R> ts <- thrips_block$Thrips_imaginis
 R> lib <- c(1, length(ts))
 R> pred <- c(1, length(ts))
@@ -1180,23 +1186,39 @@ R> plot(simplex_output$E, simplex_output$rho, type = "l",
 \end{Sinput}
 \end{Schunk}
 
-While there is an initial peak in forecast skill at \code{E = 4}, the maximum $\rho$ is at \code{E = 8}. This suggests that 4 and 8 are both practical embedding dimensions.
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=5in]{article-thrips-simplex}
+\end{center}
+\caption{\label{fig:thrips-simplex} \code{rho} vs. \code{E} for Thrips abundance.}
+\end{figure}
+
+While there is an initial peak in forecast skill at \code{E = 4}, the maximum $\rho$ is at \code{E = 8} (Figure \ref{fig:thrips-simplex}). This suggests that 4 and 8 are both practical embedding dimensions.
 
 To test for nonlinearity, we again use S-maps, and test both \code{E = 4} and \code{E = 8} to verify that the result is robust to the choice of embedding dimension.
 
-
 \begin{Schunk}
 \begin{Sinput}
+R> par(mfrow = c(1, 2), mar = c(4, 4, 1, 1), mgp = c(2.5, 1, 0))
 R> smap_output <- list(s_map(ts, lib, pred, E = 4, silent = TRUE),
 +                      s_map(ts, lib, pred, E = 8, silent = TRUE))
-R> plot(smap_output[[1]]$theta, smap_output[[1]]$rho, type = "l", xlim = c(0, 4),
+R> plot(smap_output[[1]]$theta, smap_output[[1]]$rho, 
++       type = "l", xlim = c(0, 4),
 +       xlab = "Nonlinearity (theta)", ylab = "Forecast Skill (rho)")
-R> plot(smap_output[[2]]$theta, smap_output[[2]]$rho, type = "l", xlim = c(0, 4),
+R> plot(smap_output[[2]]$theta, smap_output[[2]]$rho, 
++       type = "l", xlim = c(0, 4),
 +       xlab = "Nonlinearity (theta)", ylab = "Forecast Skill (rho)")
 \end{Sinput}
 \end{Schunk}
 
-The S-map results indicate nonlinearity in Thrips abundance, as the nonlinear models (\code{theta > 0}) give substantially better predictions than the linear model (\code{theta = 0}). This suggests that, despite the strong seasonal dynamics, the Thrips population might not simply track the environment. To look more closely at the issue of seasonal drivers, we turn to convergent cross-mapping (CCM).
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=6in]{article-thrips-smap}
+\end{center}
+\caption{\label{fig:thrips-smap} \code{rho} vs. \code{theta} for Thrips abundance at \code{E = 4} and \code{E = 8}.}
+\end{figure}
+
+The S-map results in Figure \ref{fig:thrips-smap} indicate nonlinearity in Thrips abundance, as the nonlinear models (\code{theta > 0}) give substantially better predictions than the linear model (\code{theta = 0}). This suggests that, despite the strong seasonal dynamics, the Thrips population might not simply track the environment. To look more closely at the issue of seasonal drivers, we turn to convergent cross-mapping (CCM).
 
 \subsubsection{Seasonal Drivers}\label{sec:thrips-seasonal-drivers}
 
@@ -1234,7 +1256,8 @@ R> for (ccm_from in vars)
 +      for (ccm_to in vars[vars != ccm_from])
 +      {
 +          cf_temp <- ccf(thrips_block[, ccm_from], thrips_block[, ccm_to],
-+                         type = "correlation", lag.max = 6, plot = FALSE)$acf
++                         type = "correlation", lag.max = 6, 
++                         plot = FALSE)$acf
 +          corr_matrix[ccm_from, ccm_to] <- max(abs(cf_temp))
 +      }
 +  }
@@ -1267,62 +1290,128 @@ Season                     0.45      0.95    0.53     NA
 Notice that the correlation between temperature and the seasonal indicator is extremely high. Thus, it is not surprising that the cross map results are also strong for the relationship between the seasonal variable and temperature, $\rho = 0.96$. This makes interpretation more complicated, because we have to consider the possibility that cross mapping between temperature and Thrips abundance occurs because of the shared seasonality. In other words, we may observe high cross mapping $\rho$ between two variables with a seasonal cycle, even if there is no underlying causal mechanism.
 
 \subsubsection{Convergent Cross-Mapping}\label{sec:thrips-ccm}
-With this in mind, we examine convergence in cross-map predictability, i.e. we compute \code{rho} as a function of library size \code{L}. We first look at Thrips and temperature.
+With this in mind, we examine convergence in cross-map predictability, i.e., we compute \code{rho} as a function of library size \code{L}. We first look at Thrips and temperature.
 
 \begin{Schunk}
 \begin{Sinput}
 R> thrips_xmap_maxT <- ccm(thrips_block, E = 8, random_libs = TRUE,
-+                          lib_column = "Thrips_imaginis", target_column = "maxT_degC",
-+                          lib_sizes = seq(10, 75, by = 5), num_samples = 300, 
-+                          silent = TRUE)
++                          lib_sizes = seq(10, 75, by = 5), 
++                          lib_column = "Thrips_imaginis", 
++                          target_column = "maxT_degC", 
++                          num_samples = 300, silent = TRUE)
 R> maxT_xmap_thrips <- ccm(thrips_block, E = 8, random_libs = TRUE,
-+                          lib_column = "maxT_degC", target_column = "Thrips_imaginis",
-+                          lib_sizes = seq(10, 75, by = 5), num_samples = 300, 
-+                          silent = TRUE)
-R> ccm_out <- list(ccm_means(thrips_xmap_maxT), ccm_means(maxT_xmap_thrips))
++                          lib_sizes = seq(10, 75, by = 5), 
++                          lib_column = "maxT_degC", 
++                          target_column = "Thrips_imaginis", 
++                          num_samples = 300, silent = TRUE)
+R> ccm_out <- list(ccm_means(thrips_xmap_maxT), 
++                  ccm_means(maxT_xmap_thrips))
 \end{Sinput}
 \end{Schunk}
 
+\begin{Schunk}
+\begin{Sinput}
+R> par(mar = c(4, 4, 1, 1), mgp = c(2.5, 1, 0))
+R> plot(ccm_out[[1]]$lib_size, pmax(0, ccm_out[[1]]$rho), 
++       type = "l", col = "red", ylim = c(0, 1), 
++       xlab = "Library Size", ylab = "Cross Map Skill (rho)")
+R> lines(ccm_out[[2]]$lib_size, pmax(0, ccm_out[[2]]$rho), col = "blue")
+R> abline(h = corr_matrix["Thrips_imaginis", "maxT_degC"], 
++         col = "black", lty = 2)
+R> legend("bottomright", legend = c("Thrips xmap maxT", "maxT xmap Thrips"),
++         col = c("red", "blue"), lwd = 1, bty = "n", cex = 0.8)
+\end{Sinput}
+\end{Schunk}
 
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=5in]{article-thrips-temp-ccm}
+\end{center}
+\caption{\label{fig:thrips-temp-ccm} \code{rho} vs. Library Size for Thrips abundance cross mapping temperature.}
+\end{figure}
 
+Figure \ref{fig:thrips-temp-ccm} shows the cross-mapping between Thrips and temperature, with the magnitude of the cross-correlation as a black dashed line for comparison.
 
-The magnitude of the cross-correlation between Thrips and temperature is shown as a black dashed line for comparison. We repeat the analysis for rainfall.
+We repeat the analysis for rainfall.
 
 \begin{Schunk}
 \begin{Sinput}
-R> thrips_xmap_Rain <- ccm(thrips_block, E = 8, random_libs = TRUE,
-+                          lib_column = "Thrips_imaginis", target_column = "Rain_mm",
-+                          lib_sizes = seq(10, 75, by = 5), num_samples = 300, 
-+                          silent = TRUE)
-R> Rain_xmap_thrips <- ccm(thrips_block, E = 8, random_libs = TRUE,
-+                          lib_column = "Rain_mm", target_column = "Thrips_imaginis",
-+                          lib_sizes = seq(10, 75, by = 5), num_samples = 300, 
-+                          silent = TRUE)
+R> thrips_xmap_Rain <- ccm(thrips_block, lib_sizes = seq(10, 75, by = 5), 
++                          E = 8, random_libs = TRUE, num_samples = 300, 
++                          lib_column = "Thrips_imaginis", 
++                          target_column = "Rain_mm", silent = TRUE)
+R> Rain_xmap_thrips <- ccm(thrips_block, lib_sizes = seq(10, 75, by = 5), 
++                          E = 8, random_libs = TRUE, num_samples = 300, 
++                          lib_column = "Rain_mm", 
++                          target_column = "Thrips_imaginis", silent = TRUE)
 R> ccm_out <- list(ccm_means(thrips_xmap_Rain), ccm_means(Rain_xmap_thrips))
 \end{Sinput}
 \end{Schunk}
 
+\begin{Schunk}
+\begin{Sinput}
+R> par(mar = c(4, 4, 1, 1), mgp = c(2.5, 1, 0))
+R> plot(ccm_out[[1]]$lib_size, pmax(0, ccm_out[[1]]$rho), 
++       type = "l", col = "red", ylim = c(0, 1),
++       xlab = "Library Size", ylab = "Cross Map Skill (rho)")
+R> lines(ccm_out[[2]]$lib_size, pmax(0, ccm_out[[2]]$rho), col = "blue")
+R> abline(h = corr_matrix["Thrips_imaginis", "Rain_mm"], 
++         col = "black", lty = 2)
+R> legend("topleft", col = c("red", "blue"), bty = "n", cex = 0.8, 
++         legend = c("Thrips xmap Rain", "Rain xmap Thrips"))
+\end{Sinput}
+\end{Schunk}
+
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=5in]{article-thrips-rain-ccm}
+\end{center}
+\caption{\label{fig:thrips-rain-ccm} \code{rho} vs. Library Size for Thrips abundance cross mapping rainfall.}
+\end{figure}
+
+Figure \ref{fig:thrips-rain-ccm} shows the cross-mapping between Thrips and rainfall, with the magnitude of the cross-correlation as a black dashed line for comparison.
 
 And finally for the deterministic seasonal cycle.
 
 \begin{Schunk}
 \begin{Sinput}
 R> thrips_xmap_Season <- ccm(thrips_block, E = 8, random_libs = TRUE,
-+                            lib_column = "Thrips_imaginis", target_column = "Season",
-+                            lib_sizes = seq(10, 75, by = 5), num_samples = 300, 
-+                            silent = TRUE)
++                            lib_sizes = seq(10, 75, by = 5), 
++                            lib_column = "Thrips_imaginis", num_samples = 300, 
++                            target_column = "Season", silent = TRUE)
 R> Season_xmap_thrips <- ccm(thrips_block, E = 8, random_libs = TRUE,
-+                            lib_column = "Season", target_column = "Thrips_imaginis",
-+                            lib_sizes = seq(10, 75, by = 5), num_samples = 300, 
-+                            silent = TRUE)
-R> ccm_out <- list(ccm_means(thrips_xmap_Season), ccm_means(Season_xmap_thrips))
++                            lib_sizes = seq(10, 75, by = 5), 
++                            lib_column = "Season", num_samples = 300, 
++                            target_column = "Thrips_imaginis", silent = TRUE)
+R> ccm_out <- list(ccm_means(thrips_xmap_Season), 
++                  ccm_means(Season_xmap_thrips))
 \end{Sinput}
 \end{Schunk}
 
+\begin{Schunk}
+\begin{Sinput}
+R> par(mar = c(4, 4, 1, 1), mgp = c(2.5, 1, 0))
+R> plot(ccm_out[[1]]$lib_size, pmax(0, ccm_out[[1]]$rho), 
++       type = "l", col = "red", ylim = c(0, 1), 
++       xlab = "Library Size", ylab = "Cross Map Skill (rho)")
+R> lines(ccm_out[[2]]$lib_size, pmax(0, ccm_out[[2]]$rho), col = "blue")
+R> abline(h = corr_matrix["Thrips_imaginis", "Season"], 
++         col = "black", lty = 2)
+R> legend("bottomright", col = c("red", "blue"), bty = "n", cex = 0.8, 
++         legend = c("Thrips xmap Season", "Season xmap Thrips"))
+\end{Sinput}
+\end{Schunk}
+
+\begin{figure}[t!]
+\begin{center}
+\includegraphics[width=5in]{article-thrips-season-ccm}
+\end{center}
+\caption{\label{fig:thrips-season-ccm} \code{rho} vs. Library Size for Thrips abundance cross mapping a proxy for the season.}
+\end{figure}
 
 The results show clear evidence of convergence for Thrips cross mapping the climactic variables, with the cross map $\rho$ at the maximum library size exceeding cross-correlation between the variables.
 
-However, we are still left with the conundrum that temperature and to a lesser extent, rainfall, are easily predicted from the seasonal cycle. In other words, the cross map results could be an artifact of shared seasonal forcing. Indeed, note that the pattern of results is similar for cross mapping between Thrips and an artificial indicator of the season in the figure above.
+However, we are still left with the conundrum that temperature and to a lesser extent, rainfall, are easily predicted from the seasonal cycle. In other words, the cross map results could be an artifact of shared seasonal forcing. Indeed, note that the pattern of results is similar for cross mapping between Thrips and an artificial indicator of the season in Figure \ref{fig:thrips-season-ccm}.
 
 We can distinguish a true causal effect from shared seasonal forcing and a true causal effect by using a reasonable null model and testing if cross map skill obtained for \code{maxT_degC} and \code{Rain_mm} is significantly beyond what would be explained by the null model that has the same degree of shared seasonality. This hypothesis is readily tested using randomization tests based on surrogate data. The idea here is to generate surrogate time series with the same degree of shared seasonality. Cross mapping between the time series of actual Thrips abundance and the surrogates for climatic time series thus generates a null distribution for $\rho$, against which the actual cross map $\rho$ value can be compared.
 
@@ -1335,37 +1424,47 @@ Next we compute cross mapping between the true abundance and these surrogate env
 \begin{Schunk}
 \begin{Sinput}
 R> num_surr <- 1000
-R> surr_maxT <- make_surrogate_data(thrips_block$maxT_degC, method = "seasonal",
+R> surr_maxT <- make_surrogate_data(thrips_block$maxT_degC, 
++                                   method = "seasonal",
 +                                   T_period = 12, num_surr = num_surr)
-R> surr_Rain <- make_surrogate_data(thrips_block$Rain_mm, method = "seasonal",
+R> surr_Rain <- make_surrogate_data(thrips_block$Rain_mm, 
++                                   method = "seasonal",
 +                                   T_period = 12, num_surr = num_surr)
-R> ccm_rho_surr <- data.frame(maxT = numeric(num_surr), Rain = numeric(num_surr))
+R> ccm_rho_surr <- data.frame(maxT = numeric(num_surr), 
++                             Rain = numeric(num_surr))
 R> for (i in 1:num_surr) {
-+      ccm_rho_surr$maxT[i] <- ccm(cbind(thrips_block$Thrips_imaginis, surr_maxT[,i]),
++      ccm_rho_surr$maxT[i] <- ccm(cbind(thrips_block$Thrips_imaginis, 
++                                        surr_maxT[,i]),
 +                              E = 8, lib_column = 1, target_column = 2,
-+                              lib_sizes = NROW(thrips_block), replace = FALSE, 
-+                              silent = TRUE)$rho
++                              lib_sizes = NROW(thrips_block), 
++                              replace = FALSE, silent = TRUE)$rho
 +      
-+      ccm_rho_surr$Rain[i] <- ccm(cbind(thrips_block$Thrips_imaginis, surr_Rain[,i]),
++      ccm_rho_surr$Rain[i] <- ccm(cbind(thrips_block$Thrips_imaginis, 
++                                        surr_Rain[,i]),
 +                              E = 8, lib_column = 1, target_column = 2,
-+                              lib_sizes = NROW(thrips_block), replace = FALSE, 
-+                              silent = TRUE)$rho
++                              lib_sizes = NROW(thrips_block), 
++                              replace = FALSE, silent = TRUE)$rho
 +  }
 \end{Sinput}
 \end{Schunk}
 
-These cross map values form a null distribution. We can then estimate a $p$ value for rejecting the null hypothesis that cross map $\rho$ is driven by the mutual seasonality.
+These cross map values form a null distribution for the strength of cross mapping if the time series were simply driven by a common seasonal pattern. We can then estimate a $p$ value for rejecting the null hypothesis that cross map $\rho$ is driven by the mutual seasonality.
 
 \begin{Schunk}
 \begin{Sinput}
-R> (sum(ccm_rho_matrix["Thrips_imaginis", "Rain_mm"] < ccm_rho_surr$Rain) + 1) /
+R> ccm_rho_rain <- ccm_rho_matrix["Thrips_imaginis", "Rain_mm"]
+R> (sum(ccm_rho_rain < ccm_rho_surr$Rain) + 1) /
 +      (length(ccm_rho_surr$Rain) + 1)
 \end{Sinput}
 \begin{Soutput}
 [1] 0.041
 \end{Soutput}
+\end{Schunk}
+
+\begin{Schunk}
 \begin{Sinput}
-R> (sum(ccm_rho_matrix["Thrips_imaginis", "maxT_degC"] < ccm_rho_surr$maxT) + 1) /
+R> ccm_rho_maxT <- ccm_rho_matrix["Thrips_imaginis", "maxT_degC"]
+R> (sum(ccm_rho_maxT < ccm_rho_surr$maxT) + 1) /
 +      (length(ccm_rho_surr$maxT) + 1)
 \end{Sinput}
 \begin{Soutput}
@@ -1373,13 +1472,13 @@ R> (sum(ccm_rho_matrix["Thrips_imaginis", "maxT_degC"] < ccm_rho_surr$maxT) + 1)
 \end{Soutput}
 \end{Schunk}
 
-In both cases, the cross map skill that we measure for the real time series is better than the median expectation under the null hypothesis. For rainfall, the effect is significant based on the common threshold of $p < 0.05$. Howover, cross mapping between Thrips abundance and temperature is non-significant, which could be due to the high correlation between maximum daily temperature and the seasonal cycle. In other words, the actual time series for \code{maxT_degC} is already strongly periodic, and it is difficult to detect a causal signal on top of the seasonal cycle. Using higher frequency data or spatially resolved replicates (e.g. local temperature and local population counts) could help to enhance detectability under such circumstances.
+In both cases, the cross map skill that we measure for the real time series is better than the median expectation under the null hypothesis. For rainfall, the effect is significant based on the common threshold of $p < 0.05$. Howover, cross mapping between Thrips abundance and temperature is non-significant, which could be due to the high correlation between maximum daily temperature and the seasonal cycle. In other words, the actual time series for \code{maxT_degC} is already strongly periodic, and it is difficult to detect a causal signal on top of the seasonal cycle. Using higher frequency data or spatially resolved replicates (e.g., local temperature and local population counts) could help to enhance detectability under such circumstances.
 
 \section{Technical Details}\label{sec:technical-details}
 
 \subsection{Data Input}\label{sec:data-input}
 
-The \pkg{rEDM} functions are designed to accept data in common R data formats, namely vectors, matrices, and data.frames. Depending on the specific function, one or the other data type is preferred. Please see the documentation associated with individual functions for more details.
+The \pkg{rEDM} functions are designed to accept data in common \proglang{R} data formats, namely vectors, matrices, and data.frames. Depending on the specific function, one or the other data type is preferred. Please see the documentation associated with individual functions for more details.
 
 Missing data can be recorded using either of the standard \code{NA} or \code{NaN} values. The program will automatically ignore such missing values when appropriate. For instance, simplex projection will not select nearest neighbors if any of the state vector coordinates is missing or if the corresponding target value is missing.
 
@@ -1391,105 +1490,117 @@ Many of the functions in \pkg{rEDM} are designed around the same prediction engi
 
 \begin{itemize}
 \item \code{lib}
-  + a 2-column matrix (or 2-element vector) where each row specifies the portions of the time series to use for attractor reconstruction (i.e., which reconstructed states can be selected as nearest neighbors)
-  + e.g., \code{(1, n)} specifies that the first n *rows* (from 1 to n) of data are a contiguous time series block, each point of which can be used to construct state vectors
-  + by default, \code{lib} uses the entire input as a single contiguous segment
+  \begin{itemize}
+  \item a 2-column matrix (or 2-element vector) where each row specifies the portions of the time series to use for attractor reconstruction (i.e., which reconstructed states can be selected as nearest neighbors)
+  \item e.g., \code{(1, n)} specifies that the first \code{n} \emph{rows} (from 1 to n) of data are a contiguous time series block, each point of which can be used to construct state vectors
+  \item by default, \code{lib} uses the entire input as a single contiguous segment
+  \end{itemize}
 \item \code{pred}
-  + (same format as \code{lib}, but specifes the portions of the time series to make predictions for)
+  \begin{itemize}
+  \item (same format as \code{lib}, but specifes the portions of the time series to make predictions for)
+  \end{itemize}
 \item \code{norm_type}
-  + \code{"L2 norm"} (default) or \code{"L1 norm"}: specifies which distance metric to use when doing calculations
-  + \code{"L2 norm"} is the standard Euclidean distance, where the distance between a vector $\mathbf{x} = \left(x_1, x_2, \dots, x_n \right)$ and $\mathbf{y} = \left( y_1, y_2, \dots, y_n \right)$ is computed as $\sqrt{(x_1 - y_1)^2 + (x_2 - y_2)^2 + \dots + (x_n - y_n)^2}$.
-  + \code{"L1 norm"} is the Manhattan norm (also known as taxicab distance), where the distance between a vector $\mathbf{x} = \left( x_1, x_2, \dots, x_n \right)$ and $\mathbf{y} = \left( y_1, y_2, \dots, y_n \right)$ is computed as $|x_1 - y_1| + |x_2 - y_2| + \dots + |x_n - y_n|$.
-  + \code{"P norm"} is the generalization of the L1 and L2 norms which adds a parameter $P$ as the exponent: the distance between a vector $\mathbf{x} = \left( x_1, x_2, \dots, x_n \right)$ and $\mathbf{y} = \left(y_1, y_2, \dots, y_n \right)$ is computed as ${\left(\left|x_1 - y_1\right|^P + \left|x_2 - y_2\right|^P + \dots + \left|x_n - y_n\right|^P\right)^{1/P}}$.
+  \begin{itemize}
+  \item  \code{"L2 norm"} (default) or \code{"L1 norm"}: specifies which distance metric to use when doing calculations
+  \item \code{"L2 norm"} is the standard Euclidean distance, where the distance between a vector $\mathbf{x} = \left(x_1, x_2, \dots, x_n \right)$ and $\mathbf{y} = \left( y_1, y_2, \dots, y_n \right)$ is computed as \\$\sqrt{(x_1 - y_1)^2 + (x_2 - y_2)^2 + \dots + (x_n - y_n)^2}$.
+  \item \code{"L1 norm"} is the Manhattan norm (also known as taxicab distance), where the distance between a vector $\mathbf{x} = \left( x_1, x_2, \dots, x_n \right)$ and $\mathbf{y} = \left( y_1, y_2, \dots, y_n \right)$ is computed as $|x_1 - y_1| + |x_2 - y_2| + \dots + |x_n - y_n|$.
+  \item \code{"P norm"} is the generalization of the L1 and L2 norms which adds a parameter $P$ as the exponent: the distance between a vector $\mathbf{x} = \left( x_1, x_2, \dots, x_n \right)$ and $\mathbf{y} = \left(y_1, y_2, \dots, y_n \right)$ is computed as ${\left(\left|x_1 - y_1\right|^P + \left|x_2 - y_2\right|^P + \dots + \left|x_n - y_n\right|^P\right)^{1/P}}$.
+  \end{itemize}
 \item \code{P}
-  + the exponent for the "P norm" (and otherwise ignored)
+  \begin{itemize}
+  \item the exponent for the ``P norm'' (and otherwise ignored)
+  \end{itemize}
 \item \code{E}
-  + the embedding dimension to use for time delay embedding
+  \begin{itemize}
+  \item the embedding dimension to use for time delay embedding
+  \end{itemize}
 \item \code{tau}
-  + the lag to use for time delay embedding
-  + by default, \code{tau} is set to \code{1}
+  \begin{itemize}
+  \item the lag to use for time delay embedding
+  \item by default, \code{tau} is set to \code{1}
+  \end{itemize}
 \item \code{tp}
-  + the prediction horizon (how many steps ahead to make forecasts)
-  + negative values will also work
-  + by default, \code{tp} is set to \code{1} for forecasting functions, and \code{0} for cross mapping
+  \begin{itemize}
+  \item the prediction horizon (how many steps ahead to make forecasts)
+  \item negative values will also work
+  \item by default, \code{tp} is set to \code{1} for forecasting functions, and \code{0} for cross mapping
+  \end{itemize}
 \item \code{num_neighbors}
-  + the number of neighbors to use
-  + \code{"e+1"}, \code{"E+1"}, \code{"e + 1"}, and \code{"E + 1"} will all peg this parameter to be \code{E+1} for each run
-  + values less than 1 will use all possible neighbors
+  \begin{itemize}
+  \item the number of neighbors to use
+  \item \code{"e+1"}, \code{"E+1"}, \code{"e + 1"}, and \code{"E + 1"} will all peg this parameter to be \code{E+1} for each run
+  \item values less than 1 will use all possible neighbors
+  \end{itemize}
 \item \code{theta}
-  + the nonlinear tuning parameter (for use with S-maps) that adjusts how distance is factored into computation of the local linear map (\code{0} corresponds to a globally linear map, while values greater than 0 correspond to nonlinear models where the local linear map changes as a function of state-space)
+  \begin{itemize}
+  \item the nonlinear tuning parameter (for use with S-maps) that adjusts how distance is factored into computation of the local linear map (\code{0} corresponds to a globally linear map, while values greater than 0 correspond to nonlinear models where the local linear map changes as a function of state-space)
+  \end{itemize}
 \item \code{stats_only}
-  + \code{TRUE} (default) or \code{FALSE}: specifies whether the output should just contain statistics of the predictions, or also include all the predictions that were made
-  + if enabled, adds a \code{model_output} list-column, which contains the time index, observed values, predictions, and variance of predictions for each model
+  \begin{itemize}
+  \item \code{TRUE} (default) or \code{FALSE}: specifies whether the output should just contain statistics of the predictions, or also include all the predictions that were made
+  \item if enabled, adds a \code{model_output} list-column, which contains the time index, observed values, predictions, and variance of predictions for each model
+  \end{itemize}
 \item \code{exclusion_radius}
-  + \code{exclusion_radius} sets the threshold whereby all vectors with time indices too close to the predictee will be excluded from being considered nearest neighbors
-  + e.g., \code{1} means that vectors must have an associated \emph{time index} more than 1 away from potential nearest neighbors
-  + by default, \code{exclusion_radius} is set to \code{NULL} (turning this filtering off)
+  \begin{itemize}
+  \item \code{exclusion_radius} sets the threshold whereby all vectors with time indices too close to the predictee will be excluded from being considered nearest neighbors
+  \item e.g., \code{1} means that vectors must have an associated \emph{time index} more than 1 away from potential nearest neighbors
+  \item by default, \code{exclusion_radius} is set to \code{NULL} (turning this filtering off)
+  \end{itemize}
 \item \code{epsilon}
-  + \code{epsilon} sets the threshold whereby all vectors with distance too far away from the predictee will be excluded from being considered nearest neighbors
-  + e.g., \code{2} means that vectors must have be within a \emph{distance} of 2 from potential nearest neighbors
-  + by default, \code{epsilon} is set to \code{NULL} (turning this filtering off)
+  \begin{itemize}
+  \item \code{epsilon} sets the threshold whereby all vectors with distance too far away from the predictee will be excluded from being considered nearest neighbors
+  \item e.g., \code{2} means that vectors must have be within a \emph{distance} of 2 from potential nearest neighbors
+  \item by default, \code{epsilon} is set to \code{NULL} (turning this filtering off)
+  \end{itemize}
 \item \code{silent}
-  + \code{TRUE} or \code{FALSE} (default): specifies whether to suppress warning messages from being printed to the R console
+  \begin{itemize}
+  \item \code{TRUE} or \code{FALSE} (default): specifies whether to suppress warning messages from being printed to the R console
+  \end{itemize}
 \item \code{save_smap_coefficients}
-  + \code{TRUE} or \code{FALSE} (default): specifies whether to include a data.frame of S-map coefficients with the output
-  + (note that setting this to \code{TRUE} forces the full output as if \code{stats_only = FALSE})
-  + if enabled, adds a \code{smap_coefficients} list-column, which contains the s-map coefficients; and a \code{smap_coefficient_covariance} list-column, which contains the covariance matrices for the s-map coefficients.
+  \begin{itemize}
+  \item \code{TRUE} or \code{FALSE} (default): specifies whether to include a data.frame of S-map coefficients with the output
+  \item (note that setting this to \code{TRUE} forces the full output as if \code{stats_only = FALSE})
+  \item if enabled, adds a \code{smap_coefficients} list-column, which contains the s-map coefficients; and a \code{smap_coefficient_covariance} list-column, which contains the covariance matrices for the s-map coefficients.
+  \end{itemize}
 \end{itemize}
 
 The Gaussian Process based functions, (\code{tde_gp()} and \code{block_gp()}), have a few additional parameters specific to the GP methods:
 
 \begin{itemize}
 \item \code{phi}
-  + the length-scale parameter (how wiggly the function is in state-space)
+  \begin{itemize}
+  \item the length-scale parameter (how wiggly the function is in state-space)
+  \end{itemize}
 \item \code{v_e}
-  + the noise-variance parameter (the variance of noise on top of the outputs of the GP)
+  \begin{itemize}
+  \item the noise-variance parameter (the variance of noise on top of the outputs of the GP)
+  \end{itemize}
 \item \code{eta}
-  + the signal-variance parameter (the variance of the deterministic skeleton of the GP)
+  \begin{itemize}
+  \item the signal-variance parameter (the variance of the deterministic skeleton of the GP)
+  \end{itemize}
 \item \code{fit_params}
-  + \code{TRUE} (default) or \code{FALSE}: specifies whether to fit the above parameters over the \code{lib} portion of the data, or use the parameters as given
+  \begin{itemize}
+  \item \code{TRUE} (default) or \code{FALSE}: specifies whether to fit the above parameters over the \code{lib} portion of the data, or use the parameters as given
+  \end{itemize}
 \item \code{save_covariance_matrix}
-  + \code{TRUE} or \code{FALSE} (default): specifies whether to include a matrix for the covariance between predictions
+  \begin{itemize}
+  \item \code{TRUE} or \code{FALSE} (default): specifies whether to include a matrix for the covariance between predictions
+  \end{itemize}
 \end{itemize}
 
 \section{Acknowledgments}\label{sec:acknowledgments}
 
 \pkg{rEDM} is the latest incarnation of EDM code. Past versions have been developed by George Sugihara, Alan Trombla, Richard Penner, Victor Wong, Martin Casdagli, Jerome Cartagena, Mohsen Azarbayejani, Ava Pierce, Jennifer Trezzo, and Hao Ye.
 
-We thank Jun Cai, Jane Cowles, Yair Daon, Andrew Edwards, Oliver Keyes, James Stagge, Masayuki Ushio, and Ethan White, for their suggestions and contributions to the package and its documentation.
+We thank Jun Cai, Jane Cowles, Yair Daon, Andrew Edwards, Oliver Keyes, Steve Munch, James Stagge, Masayuki Ushio, and Ethan White, for their suggestions and contributions to the package and its documentation.
 
 Package development and its documentation were supported by a Gordon and Betty Moore Foundation Data-Driven Discovery Initiative through Grant GBMF4563 (to Ethan P. White), NSF grant DEB-1655203 (GS), NSF grant DBI-1667584 (GS), U.S. Department of Defense Strategic Environmental Research and Development Program 15 RC-2509 (GS), Lenfest Ocean Program award 00028335 (GS), the Deutsche Bank-Jameson Complexity Studies Fund (GS), the Sugihara Family Trust (GS), the Leslie and John McQuown Gift and the McQuown Chair in Natural Sciences, UCSD (GS).
 
 Data collection for the Cedar Creek LTER was funded by NSF grant DEB-9411972 (to G. David Tilman), DEB-0080382 (to G. David Tilman), DEB-0620652 (to G. David Tilman), and DEB-1234162 (to Eric Seabloom).
 
-
-
 \newpage
 
-\begin{appendix}
-
-\section{More technical details} \label{app:technical}
-
-\begin{leftbar}
-Appendices can be included after the bibliography (with a page break). Each
-section within the appendix should have a proper section title (rather than
-just \emph{Appendix}).
-
-For more technical style details, please check out JSS's style FAQ at
-\url{https://www.jstatsoft.org/pages/view/style#frequently-asked-questions}
-which includes the following topics:
-\begin{itemize}
-  \item Title vs.\ sentence case.
-  \item Graphics formatting.
-  \item Naming conventions.
-  \item Turning JSS manuscripts into \proglang{R} package vignettes.
-  \item Trouble shooting.
-  \item Many other potentially helpful details\dots
-\end{itemize}
-\end{leftbar}
-
-
-\end{appendix}
 
 %% -----------------------------------------------------------------------------
 
