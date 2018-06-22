@@ -1,4 +1,4 @@
-\begin{thebibliography}{6}
+\begin{thebibliography}{22}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -9,10 +9,94 @@
   \urlstyle{rm}\Url}\fi
 \providecommand{\eprint}[2][]{\url{#2}}
 
+\bibitem[{Casdagli \emph{et~al.}(1991)Casdagli, Eubank, Farmer, and
+  Gibson}]{Casdagli_1991}
+Casdagli M, Eubank S, Farmer J, Gibson J (1991).
+\newblock \enquote{State space reconstruction in the presence of noise.}
+\newblock \emph{Physica D: Nonlinear Phenomena}, \textbf{51}(1-3), 52--98.
+
+\bibitem[{Clark \emph{et~al.}(2015)Clark, Ye, Isbell, Deyle, Cowles, Tilman,
+  and Sugihara}]{Clark_2015}
+Clark AT, Ye H, Isbell F, Deyle ER, Cowles J, Tilman D, Sugihara G (2015).
+\newblock \enquote{Spatial 'convergent cross mapping' to detect causal
+  relationships from short time-series.}
+\newblock \emph{Ecology}, \textbf{96}(5), 1175--1181.
+
+\bibitem[{Davidson and Andrewartha(1948{\natexlab{a}})}]{Davidson_1948}
+Davidson J, Andrewartha HG (1948{\natexlab{a}}).
+\newblock \enquote{Annual trends in a natural population of \emph{{Thrips}
+  imaginis} ({Thysanoptera}).}
+\newblock \emph{Journal of Animal Ecology}, \textbf{17}, 193--199.
+
+\bibitem[{Davidson and Andrewartha(1948{\natexlab{b}})}]{Davidson_1948a}
+Davidson J, Andrewartha HG (1948{\natexlab{b}}).
+\newblock \enquote{The influence of rainfall, evaporation and atmospheric
+  temperature on fluctuations in the size of a natural population of
+  \emph{{Thrips} imaginis} ({Thysanoptera}).}
+\newblock \emph{Journal of Animal Ecology}, \textbf{17}, 200--222.
+
+\bibitem[{Deyle \emph{et~al.}(2016)Deyle, May, Munch, and
+  Sugihara}]{Deyle_2016}
+Deyle ER, May RM, Munch SB, Sugihara G (2016).
+\newblock \enquote{Tracking and forecasting ecosystem interactions in real
+  time.}
+\newblock \emph{Proceedings of the Royal Society of London B}, \textbf{283}.
+
+\bibitem[{Deyle and Sugihara(2011)}]{Deyle_2011}
+Deyle ER, Sugihara G (2011).
+\newblock \enquote{Generalized theorems for nonlinear state space
+  reconstruction.}
+\newblock \emph{PLoS ONE}, \textbf{6}, e18295.
+
 \bibitem[{Dixon \emph{et~al.}(1999)Dixon, Milicich, and Sugihara}]{Dixon_1999}
 Dixon PA, Milicich M, Sugihara G (1999).
 \newblock \enquote{Episodic fluctuations in larval supply.}
 \newblock \emph{Science}, \textbf{283}, 1528--1530.
+
+\bibitem[{Fargione and Tilman(2005)}]{Fargione_2005}
+Fargione JE, Tilman D (2005).
+\newblock \enquote{Diversity decreases invasion via both sampling and
+  complementarity effects.}
+\newblock \emph{Ecology Letters}, \textbf{8}, 604--611.
+
+\bibitem[{Fisher(1915)}]{Fisher_1915}
+Fisher RA (1915).
+\newblock \enquote{Frequency distribution of the values of the correlation
+  coefficient in samples from an indefinitely large population.}
+\newblock \emph{Biometrika}, \textbf{10}(4), 507--521.
+
+\bibitem[{Granger(1969)}]{Granger_1969}
+Granger C (1969).
+\newblock \enquote{Investigating causal relations by econometric models and
+  cross-spectral methods.}
+\newblock \emph{Econometrica}, \textbf{37}(3), 424--438.
+
+\bibitem[{Hsieh \emph{et~al.}(2008)Hsieh, Anderson, and Sugihara}]{Hsieh_2008}
+Hsieh CH, Anderson C, Sugihara G (2008).
+\newblock \enquote{Extending nonlinear analysis to short Ecological time
+  series.}
+\newblock \emph{The American Naturalist}, \textbf{171}(1), 71--80.
+
+\bibitem[{Lorenz(1963)}]{Lorenz_1963}
+Lorenz EN (1963).
+\newblock \enquote{Deterministic nonperiodic flow.}
+\newblock \emph{Journal of the Atmospheric Sciences}, \textbf{20}(2), 130--141.
+
+\bibitem[{Moran(1953)}]{Moran_1953}
+Moran PAP (1953).
+\newblock \enquote{The statistical analysis of the Canadian Lynx cycle II.
+  synchronization and meteorology.}
+\newblock \emph{Australian Journal of Zoology}, pp. 291--298.
+
+\bibitem[{NERC Centre~for
+  Population~Biology(2010)}]{NERC-Centre-for-Population-Biology_2010}
+NERC Centre~for Population~Biology IC (2010).
+\newblock \enquote{The Global Population Dynamics Database Version 2.}
+
+\bibitem[{Sauer \emph{et~al.}(1991)Sauer, Yorke, and Casdagli}]{Sauer_1991}
+Sauer T, Yorke JA, Casdagli M (1991).
+\newblock \enquote{Embedology.}
+\newblock \emph{Journal of Statistical Physics}, \textbf{65}(3-4), 579--616.
 
 \bibitem[{Sugihara(1994)}]{Sugihara_1994}
 Sugihara G (1994).
@@ -38,6 +122,20 @@ Takens F (1981).
 \newblock \enquote{Detecting strange attractors in turbulence.}
 \newblock \emph{Dynamical Systems and Turbulence, Lecture Notes in
   Mathematics}, \textbf{898}, 366--381.
+
+\bibitem[{Tilman \emph{et~al.}(1997)Tilman, Knops, Wedin, Reich, Ritchie, and
+  Siemann}]{Tilman_1997}
+Tilman D, Knops J, Wedin D, Reich P, Ritchie M, Siemann E (1997).
+\newblock \enquote{The Influence of Functional Diversity and Composition on
+  Ecosystem Processes.}
+\newblock \emph{Science}, \textbf{277}(5330), 1300--1302.
+\newblock \eprint{http://www.sciencemag.org/content/277/5330/1300.full.pdf}.
+
+\bibitem[{Ye \emph{et~al.}(2015)Ye, Deyle, Gilarranz, and Sugihara}]{Ye_2015a}
+Ye H, Deyle ER, Gilarranz LJ, Sugihara G (2015).
+\newblock \enquote{Distinguishing time-delayed causal interactions using
+  convergent cross mapping.}
+\newblock \emph{Scientific Reports}, \textbf{5}, 14750.
 
 \bibitem[{Ye and Sugihara(2016)}]{Ye_2016}
 Ye H, Sugihara G (2016).
